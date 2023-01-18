@@ -67,11 +67,15 @@ def notification():
             db.session.add(notification)
             db.session.commit()
 
+
+
             # create message
             msg = Message(str(notification.id))
 
+            bus_qClient= queue_client.from_connection_string(app.config.get('SERVICE_BUS_CONNECTION_STRING'), app.config.get('SERVICE_BUS_QUEUE_NAME'))
+
             # send message
-            queue_client.send(msg)   
+            bus_qClient.send(msg)   
 
             ##################################################
             ## TODO: Refactor This logic into an Azure Function
